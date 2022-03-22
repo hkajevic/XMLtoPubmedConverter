@@ -10,16 +10,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
-
-    UserService userService;
-
     @Autowired
+    private UserService userService;
+
     public UserController(UserService userService){
         this.userService = userService;
     }
 
-    @GetMapping("/getUser/{username}")
+    @GetMapping("api/getUser/{username}")
     public User getUserByUsername(@PathVariable String username){
         return userService.getUserByUsername(username);
+    }
+    @GetMapping("/api")
+    public String check(){
+        return "App working";
     }
 }

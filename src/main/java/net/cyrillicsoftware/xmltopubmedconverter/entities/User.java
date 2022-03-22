@@ -4,16 +4,16 @@ import lombok.Data;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"username"}),
-})
+//import javax.persistence.*;
+//
+//@Entity
+//@Table(name = "users", uniqueConstraints = {
+//        @UniqueConstraint(columnNames = {"username"}),
+//})
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String username;
     private String password;

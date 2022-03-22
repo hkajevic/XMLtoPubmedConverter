@@ -1,12 +1,11 @@
 package net.cyrillicsoftware.xmltopubmedconverter.security;
 
-import net.cyrillicsoftware.xmltopubmedconverter.entities.User;
-import net.cyrillicsoftware.xmltopubmedconverter.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -16,34 +15,41 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     //inject dependencies
     @Autowired
-    private JwtTokenProvider tokenProvider;
+    private JwtUtil jwtUtil;
 
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private MyUserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String token = getJwtFromToken(request);
-        // validate token
-        if(StringUtils.hasText(token) && tokenProvider.validateToken(token)){
-            // get username from token
-            String username = tokenProvider.getUsernameFromJWT(token);
-            // load user associated with token
-            UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
 
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities()
-            );
-            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            // set spring security
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        final String authorizeHeader = request.getHeader("Authorization");
+
+        String username = null;
+        String jwt = null;
+
+        if(authorizeHeader != null && authorizeHeader.startsWith("Bearer ")){
+            jwt = authorizeHeader.substring(7);
+            username = jwtUtil.extractUsername(jwt);
+        }
+        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            if(jwtUtil.validateToken(jwt, userDetails)){
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails, null, userDetails.getAuthorities());
+                usernamePasswordAuthenticationToken.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            }
         }
         filterChain.doFilter(request, response);
     }
