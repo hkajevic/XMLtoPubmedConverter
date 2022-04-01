@@ -1,6 +1,6 @@
 package net.cyrillicsoftware.xmltopubmedconverter.exception;
 
-import net.cyrillicsoftware.xmltopubmedconverter.ErrorDetails;
+import net.cyrillicsoftware.xmltopubmedconverter.exception.ErrorDetails;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,11 +28,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
 
     }
+    @ExceptionHandler(WrongFormatException.class)
+    public ResponseEntity<ErrorDetails> handleWrongFormatException(
+            WrongFormatException exception,
+            WebRequest request){
+
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
+                request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+
+    }
 
     //for all (undefined) errors
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetails> handleGlobalException(
-            ResourceNotFoundException exception,
+            Exception exception,
             WebRequest request){
 
         ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
