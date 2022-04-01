@@ -3,7 +3,7 @@ package net.cyrillicsoftware.xmltopubmedconverter.controllers;
 import net.cyrillicsoftware.xmltopubmedconverter.payload.AuthenticationRequest;
 import net.cyrillicsoftware.xmltopubmedconverter.payload.AuthenticationResponse;
 import net.cyrillicsoftware.xmltopubmedconverter.security.JwtUtil;
-import net.cyrillicsoftware.xmltopubmedconverter.security.MyUserDetailsService;
+import net.cyrillicsoftware.xmltopubmedconverter.services.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
