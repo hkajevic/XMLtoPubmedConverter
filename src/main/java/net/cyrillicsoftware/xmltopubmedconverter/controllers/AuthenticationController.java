@@ -4,7 +4,6 @@ import net.cyrillicsoftware.xmltopubmedconverter.payload.AuthenticationRequest;
 import net.cyrillicsoftware.xmltopubmedconverter.payload.AuthenticationResponse;
 import net.cyrillicsoftware.xmltopubmedconverter.security.JwtUtil;
 import net.cyrillicsoftware.xmltopubmedconverter.services.MyUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,15 +17,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthenticationController {
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
-    @Autowired
-    private MyUserDetailsService userDetailsService;
+    private final MyUserDetailsService userDetailsService;
 
     //in order to authenticate user we need this manager
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+
+    public AuthenticationController(JwtUtil jwtUtil,
+                                    MyUserDetailsService userDetailsService,
+                                    AuthenticationManager authenticationManager) {
+        this.jwtUtil = jwtUtil;
+        this.userDetailsService = userDetailsService;
+        this.authenticationManager = authenticationManager;
+    }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(

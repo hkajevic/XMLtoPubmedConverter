@@ -3,6 +3,7 @@ package net.cyrillicsoftware.xmltopubmedconverter.controllers;
 import net.cyrillicsoftware.xmltopubmedconverter.exception.ResourceNotFoundException;
 import net.cyrillicsoftware.xmltopubmedconverter.exception.WrongFormatException;
 import net.cyrillicsoftware.xmltopubmedconverter.model.Doc;
+import net.cyrillicsoftware.xmltopubmedconverter.payload.Paths;
 import net.cyrillicsoftware.xmltopubmedconverter.services.DocStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -22,10 +23,11 @@ import java.util.Optional;
 @RestController
 public class DocController {
 
-    private static String INPUT_PATH = "C:\\Users\\Asus\\Desktop\\posao\\xml-to-pubmed-converter\\xml-to-pubmed-converter\\src\\main\\java\\net\\cyrillicsoftware\\xmltopubmedconverter\\transformation\\input.xml";
+    private final DocStorageService docStorageService;
 
-    @Autowired
-    private DocStorageService docStorageService;
+    public DocController(DocStorageService docStorageService) {
+        this.docStorageService = docStorageService;
+    }
 
     @GetMapping("/req")
     public String checkReq() {
@@ -53,16 +55,12 @@ public class DocController {
         }
 
         Doc doc = optDoc.get();
-        Doc.writeByte(doc.getData(), INPUT_PATH);
+        Doc.writeByte(doc.getData(), Paths.OUTPUT_PATH);
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(doc.getDocType()))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment:filename=\"" + doc.getDocName() + "\"")
                 .body(new ByteArrayResource(doc.getData()));
     }
-//    @GetMapping("/proba")
-//    public String proba(){
-//        return "proba";
-//    }
 
 }
