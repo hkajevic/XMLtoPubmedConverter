@@ -1,5 +1,6 @@
 package net.cyrillicsoftware.xmltopubmedconverter.exception;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import net.cyrillicsoftware.xmltopubmedconverter.exception.ErrorDetails;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
                 request.getDescription(false));
-        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorDetails, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+
+    }
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ErrorDetails> handleTokenExpiredException(
+            ExpiredJwtException exception,
+            WebRequest request){
+
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
+                request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
 
     }
 
