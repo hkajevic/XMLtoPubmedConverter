@@ -3,6 +3,7 @@ package net.cyrillicsoftware.xmltopubmedconverter.model;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +16,7 @@ public class DocTests {
     private Doc doc;
 
     @Test
+    @DisplayName("Test 1 - Successful writing to file")
     public void givenByteArrayAndFilePath_whenWritingToFile_thenByteInserted(){
 
         String OUTPUT_PATH = "C:\\Users\\Asus\\Desktop\\posao\\xml-to-pubmed-converter\\xml-to-pubmed-converter" +
@@ -28,6 +30,7 @@ public class DocTests {
     }
 
     @Test
+    @DisplayName("Test 2 - Unsuccessful writing to file")
     public void givenByteArrayAndBadPath_whenWritingToFile_thenExceptionThrown(){
         String OUTPUT_PATH = "Desktop\\wrong.xml";
 

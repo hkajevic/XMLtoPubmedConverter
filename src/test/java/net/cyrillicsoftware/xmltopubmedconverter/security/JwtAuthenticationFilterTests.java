@@ -2,6 +2,7 @@ package net.cyrillicsoftware.xmltopubmedconverter.security;
 
 import net.cyrillicsoftware.xmltopubmedconverter.services.MyUserDetailsService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
@@ -36,10 +37,11 @@ public class JwtAuthenticationFilterTests {
     }
 
     @Test
+    @DisplayName("Test 1 - Authentication test")
     public void givenRequestAndResponseAndChain_whenSentRequest_thenAuthenticate(){
 
-        BDDMockito.given(httpServletRequest.getHeader("Authorization"))
-                .willReturn("token");
+//        BDDMockito.given(httpServletRequest.getHeader("Authorization"))
+//                .willReturn("token");
         //BDDMockito.given()
     }
 

@@ -21,7 +21,7 @@ public class JwtUtilTests {
     @Autowired
     MyUserDetailsService myUserDetailsService;
 
-    @DisplayName("JWT not expired")
+    @DisplayName("Test 1 - JWT not expired")
     @Test
     public void givenToken_whenVerified_thenValid(){
 
@@ -33,7 +33,7 @@ public class JwtUtilTests {
         assertThat(isExpired).isEqualTo(true);
     }
 
-    @DisplayName("JWT expired")
+    @DisplayName("Test 2 - JWT expired")
     @Test
     public void givenUserAndToken_whenVerified_thenReturnNotExpired(){
         UserDetails userDetails = myUserDetailsService.loadUserByUsername("cyrillicsoftware");
@@ -44,7 +44,7 @@ public class JwtUtilTests {
         assertThat(notExpired).isEqualTo(false);
     }
 
-    @DisplayName("Valid username in token")
+    @DisplayName("Test 3 - Valid username in token")
     @Test
     public void givenUserAndToken_whenCreatedToken_thenReturnValidUserInToken(){
         UserDetails userDetails = myUserDetailsService.loadUserByUsername("cyrillicsoftware");
@@ -57,7 +57,7 @@ public class JwtUtilTests {
         assertThat(username).isEqualTo("cyrillicsoftware");
     }
 
-    @DisplayName("Invalid username in token")
+    @DisplayName("Test 4 - Invalid username in token")
     @Test
     public void givenTokenAndUser_whenVerified_thenReturnInvalidUsername(){
         UserDetails userDetails = new User("wrong_username", "cyrillicsoftware_2022",new ArrayList<>());

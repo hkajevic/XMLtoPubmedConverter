@@ -1,6 +1,9 @@
 package net.cyrillicsoftware.xmltopubmedconverter.services;
 
 import static org.assertj.core.api.Assertions.*;
+
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +16,7 @@ public class MyUserDetailsServiceTests {
     private MyUserDetailsService myUserDetailsService;
 
     @Test
+    @DisplayName("Test 1 - Successful user loading")
     public void givenUserDetails_whenLoadUser_thenReturnExistingUser(){
 
         UserDetails userDetails = myUserDetailsService.loadUserByUsername("");

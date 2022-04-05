@@ -1,6 +1,7 @@
 package net.cyrillicsoftware.xmltopubmedconverter.controllers;
 
 import net.cyrillicsoftware.xmltopubmedconverter.model.Doc;
+import net.cyrillicsoftware.xmltopubmedconverter.payload.Paths;
 import net.cyrillicsoftware.xmltopubmedconverter.services.DocStorageService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -33,8 +34,8 @@ public class XmlPubmedTransformerControllerTest {
     @Test
     @DisplayName("Test 1 - Unsuccessful transformation: Bad file ID")
     public void givenWrongFileId_whenTransformedFile_thenError() throws Exception {
-        long fileId = 1;
-        byte[] data = "Wrong file ID!".getBytes(StandardCharsets.UTF_8);
+        long fileId = 25;
+        byte[] data = "Unsuccessful transformation!".getBytes(StandardCharsets.UTF_8);
 
         Doc doc = new Doc(
                 "input1.xml",
@@ -52,12 +53,8 @@ public class XmlPubmedTransformerControllerTest {
     @DisplayName("Test 2 - Successful transformation")
     public void given_when_then() throws Exception {
         long fileId = 1;
-        File inputFile = new File("C:\\Users\\Asus\\Desktop\\posao\\xml-to-pubmed-converter\\" +
-                "xml-to-pubmed-converter\\src\\test\\java\\net\\cyrillicsoftware\\xmltopubmedconverter\\" +
-                "controllers\\files\\expectedInput.xml");
-        File outputFile = new File("C:\\Users\\Asus\\Desktop\\posao\\xml-to-pubmed-converter\\" +
-                "xml-to-pubmed-converter\\src\\test\\java\\net\\cyrillicsoftware\\xmltopubmedconverter\\" +
-                "controllers\\files\\expectedOutput.xml");
+        File inputFile = new File(Paths.EXP_INPUT);
+        File outputFile = new File(Paths.EXP_OUTPUT);
 
         Scanner inputScanner = new Scanner(inputFile);
         inputScanner.useDelimiter("\\Z");
@@ -74,11 +71,9 @@ public class XmlPubmedTransformerControllerTest {
 
         mvc.perform(get("/transform/{fileId}", fileId))
                 .andExpect(status().isOk())
-                .andExpect(content().bytes("Transformation successful".getBytes(StandardCharsets.UTF_8)));
+                .andExpect(content().bytes("Transformation successful!".getBytes(StandardCharsets.UTF_8)));
 
-        File originalOutputFile = new File("C:\\Users\\Asus\\Desktop\\posao\\xml-to-pubmed-converter\\" +
-                "xml-to-pubmed-converter\\src\\main\\java\\net\\cyrillicsoftware\\" +
-                "xmltopubmedconverter\\transformation\\output.xml");
+        File originalOutputFile = new File(Paths.OUTPUT_PATH);
 
         Scanner originalScanner = new Scanner(originalOutputFile);
         originalScanner.useDelimiter("\\Z");
